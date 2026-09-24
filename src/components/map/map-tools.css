@@ -1,0 +1,207 @@
+/* DeltaView map add-ons — swipe divider + GIS tool rail. */
+
+.leaflet-container {
+  --dv-panel: rgba(17, 20, 26, 0.82);
+  --dv-brd: rgba(255, 255, 255, 0.12);
+  --dv-ink: #e9eef5;
+  --dv-ink-dim: #9aa6b6;
+  --dv-accent: #4fd1c5;
+}
+
+/* ------------------------------ swipe ------------------------------ */
+.dv-swipe-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  cursor: ew-resize;
+  touch-action: none;
+}
+.dv-swipe-handle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -11px;
+  right: -11px;
+}
+.dv-swipe-handle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  background-image: linear-gradient(#111, #111), linear-gradient(#111, #111),
+    linear-gradient(#111, #111), linear-gradient(#111, #111);
+  background-repeat: no-repeat;
+  background-size: 2px 10px, 2px 10px, 6px 2px, 6px 2px;
+  background-position: 13px 12px, 19px 12px, 7px 16px, 21px 16px;
+}
+.dv-swipe-handle:focus-visible {
+  outline: 2px solid var(--dv-accent);
+  outline-offset: 2px;
+}
+
+.dv-swipe-label {
+  position: absolute;
+  top: 14px;
+  z-index: 900;
+  pointer-events: none;
+  background: var(--dv-panel);
+  border: 1px solid var(--dv-brd);
+  backdrop-filter: blur(8px);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dv-ink);
+  white-space: nowrap;
+}
+.dv-swipe-label.left { left: 14px; }
+.dv-swipe-label.right { right: 62px; } /* clears the tool rail */
+
+/* ---------------------------- tool rail ---------------------------- */
+.dv-tools {
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dv-tools.top-right { top: 14px; right: 14px; }
+.dv-tools.top-left { top: 14px; left: 14px; }
+.dv-tools.bottom-right { bottom: 14px; right: 14px; }
+.dv-tools.bottom-left { bottom: 14px; left: 14px; }
+
+.dv-rail {
+  display: flex;
+  flex-direction: column;
+  background: var(--dv-panel);
+  border: 1px solid var(--dv-brd);
+  border-radius: 10px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+.dv-btn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 0;
+  color: var(--dv-ink);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.12s, color 0.12s;
+}
+.dv-rail .dv-btn:last-child { border-bottom: 0; }
+.dv-btn:hover { background: rgba(255, 255, 255, 0.08); }
+.dv-btn.active { background: var(--dv-accent); color: #06211f; }
+.dv-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dv-pop {
+  position: absolute;
+  right: 46px;
+  top: 0;
+  min-width: 190px;
+  background: var(--dv-panel);
+  border: 1px solid var(--dv-brd);
+  border-radius: 10px;
+  padding: 10px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  color: var(--dv-ink);
+}
+.dv-tools.top-left .dv-pop,
+.dv-tools.bottom-left .dv-pop { right: auto; left: 46px; }
+.dv-pop h4 {
+  margin: 0 0 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dv-ink-dim);
+  font-weight: 600;
+}
+.dv-pop label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 2px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.dv-pop input { accent-color: var(--dv-accent); }
+
+/* ---------------------------- readouts ----------------------------- */
+.dv-readout {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+.dv-chip {
+  background: var(--dv-panel);
+  border: 1px solid var(--dv-brd);
+  border-radius: 8px;
+  padding: 7px 11px;
+  backdrop-filter: blur(10px);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--dv-ink-dim);
+}
+.dv-chip b { color: var(--dv-ink); font-weight: 600; }
+
+.dv-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(79, 209, 197, 0.14);
+  border: 1px solid rgba(79, 209, 197, 0.5);
+  color: #d7fffb;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.dv-measure-tip {
+  background: rgba(17, 20, 26, 0.9);
+  border: 1px solid var(--dv-brd);
+  color: var(--dv-ink);
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 11px;
+  white-space: nowrap;
+  box-shadow: none;
+}
+.dv-measure-tip::before { display: none; }
+
+@media (max-width: 640px) {
+  .dv-swipe-label.right { right: 56px; }
+  .dv-btn { width: 34px; height: 34px; }
+} 
