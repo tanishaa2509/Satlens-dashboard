@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useScene } from "../../context/SceneContext";
 import JobSearchBar from "./JobQueryBar";
 import JobCard from "./JobCard";
+import JobStats from "./JobStats";
 
 export default function JobSelection() {
   const { jobs, inspectJob, deleteJob, selectedJob, resetToDefaultJobs } =
@@ -41,6 +42,9 @@ export default function JobSelection() {
           detection.
         </p>
       </div>
+
+      {/* Job Statistics */}
+      <JobStats jobs={jobs} />
 
       {/* */}
       <JobSearchBar
