@@ -1,6 +1,6 @@
 import { useScene } from "../../context/SceneContext";
 
-export default function RunDetectionButton() {
+export default function RunDetectionButton({ onClickHandler }) {
   const {
     detectionStatus,
     runDetection,
@@ -22,11 +22,20 @@ export default function RunDetectionButton() {
   const isRunning = detectionStatus === "running";
   const isComplete = detectionStatus === "complete";
 
+  // Agar prop mila toh wo chalega, nahi toh direct runDetection
+  const handleClick = () => {
+    if (onClickHandler) {
+      onClickHandler();
+    } else {
+      runDetection();
+    }
+  };
+
   return (
     <div className="run-detection" id="run-detection">
       <button
         className={`run-detection-btn ${isRunning ? "run-detection-btn--running" : ""}`}
-        onClick={runDetection}
+        onClick={handleClick}
         disabled={!isInputValid || isRunning}
       >
         <span className="run-detection-btn__icon">

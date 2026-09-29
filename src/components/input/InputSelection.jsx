@@ -6,11 +6,32 @@ import RunDetectionButton from "./RunDetectionButton";
 import InfoBanner from "./InfoBanner";
 
 export default function InputSelection() {
-  const { inputMode, setInputMode, selectedVillage } = useScene();
+  const {
+    inputMode,
+    setInputMode,
+    selectedVillage,
+    t1Scene,
+    t2Scene,
+    uploadedFiles,
+    runDetection,
+  } = useScene();
 
   const isVillageSelected = Boolean(
     selectedVillage && selectedVillage.trim() !== "",
   );
+
+  const handleDummyRun = () => {
+    console.log("--- Dummy Detection Triggered ---");
+    console.log("Selected Inputs:", {
+      inputMode,
+      selectedVillage,
+      t1Scene,
+      t2Scene,
+      uploadedFiles,
+    });
+
+    runDetection();
+  };
 
   return (
     <div className="section" id="input-selection">
@@ -52,12 +73,10 @@ export default function InputSelection() {
 
       <div className="divider" />
 
-      {/*  */}
       <VillageSelector />
 
       <div className="divider" />
 
-      {/*  */}
       {inputMode === "directory" ? (
         isVillageSelected && <SceneDropdown />
       ) : (
@@ -65,7 +84,9 @@ export default function InputSelection() {
       )}
 
       <div className="divider" />
-      <RunDetectionButton />
+
+      {/* */}
+      <RunDetectionButton onClickHandler={handleDummyRun} />
 
       <div className="divider" />
       <InfoBanner />

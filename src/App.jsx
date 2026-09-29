@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { ThemeProvider } from "./context/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
 import { SceneProvider, useScene } from "./context/SceneContext";
-import TopBar from "./components/layout/TopBar";
+import TopBar from "./components/layout/Topbar";
 import Sidebar from "./components/layout/Sidebar";
 import InputSelection from "./components/input/InputSelection";
 import JobSelection from "./components/jobs/JobSelection";
@@ -14,7 +15,11 @@ function DashboardContent() {
   return (
     <div
       className="main-content__inner"
-      style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+      }}
     >
       {/* TABS NAVIGATION HEADER */}
       <div
@@ -134,22 +139,24 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <SceneProvider>
-        <div className="app-layout">
-          <TopBar
-            onToggleSidebar={() => setSidebarOpen((v) => !v)}
-            sidebarOpen={sidebarOpen}
-          />
+      <AuthProvider>
+        <SceneProvider>
+          <div className="app-layout">
+            <TopBar
+              onToggleSidebar={() => setSidebarOpen((v) => !v)}
+              sidebarOpen={sidebarOpen}
+            />
 
-          <div className="app-body">
-            <Sidebar collapsed={!sidebarOpen} />
+            <div className="app-body">
+              <Sidebar collapsed={!sidebarOpen} />
 
-            <main className="main-content">
-              <DashboardContent />
-            </main>
+              <main className="main-content">
+                <DashboardContent />
+              </main>
+            </div>
           </div>
-        </div>
-      </SceneProvider>
+        </SceneProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

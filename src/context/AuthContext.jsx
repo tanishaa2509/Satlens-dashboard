@@ -1,0 +1,41 @@
+import { createContext, useContext, useState } from "react";
+
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  const login = () => {
+    setUserName("Tanisha");
+    setIsLoggedIn(true);
+  };
+
+  const logout = () => {
+    setUserName("");
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        userName,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return context;
+}
