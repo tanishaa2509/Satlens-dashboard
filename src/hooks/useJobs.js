@@ -5,17 +5,17 @@ export function useJobs() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [jobs, setJobs] = useState([]);
 
-  // Load initial jobs from localStorage or fetch via jobService
+  // Load initial jobs from localStorage using standardized key
   useEffect(() => {
     async function loadJobs() {
       try {
-        const savedJobs = localStorage.getItem("encroachment_jobs");
+        const savedJobs = localStorage.getItem("satlens_jobs");
         if (savedJobs) {
           setJobs(JSON.parse(savedJobs));
         } else {
           const initialJobs = await fetchJobs();
           setJobs(initialJobs);
-          localStorage.setItem("encroachment_jobs", JSON.stringify(initialJobs));
+          localStorage.setItem("satlens_jobs", JSON.stringify(initialJobs));
         }
       } catch (error) {
         console.error("Failed to load jobs from localStorage:", error);
@@ -27,11 +27,11 @@ export function useJobs() {
     loadJobs();
   }, []);
 
-  // Sync state changes to localStorage
+  // Sync state changes to localStorage under satlens_jobs
   useEffect(() => {
     if (jobs.length > 0) {
       try {
-        localStorage.setItem("encroachment_jobs", JSON.stringify(jobs));
+        localStorage.setItem("satlens_jobs", JSON.stringify(jobs));
       } catch (error) {
         console.error("Failed to save jobs to localStorage", error);
       }
@@ -46,7 +46,7 @@ export function useJobs() {
     if (e) e.stopPropagation();
     setJobs((prevJobs) => {
       const updated = prevJobs.filter((job) => job.id !== jobId);
-      localStorage.setItem("encroachment_jobs", JSON.stringify(updated));
+      localStorage.setItem("satlens_jobs", JSON.stringify(updated));
       return updated;
     });
     setSelectedJob((prev) => (prev?.id === jobId ? null : prev));
@@ -56,7 +56,7 @@ export function useJobs() {
     try {
       const defaultJobs = await fetchJobs();
       setJobs(defaultJobs);
-      localStorage.setItem("encroachment_jobs", JSON.stringify(defaultJobs));
+      localStorage.setItem("satlens_jobs", JSON.stringify(defaultJobs));
       setSelectedJob(null);
     } catch (error) {
       console.error("Failed to reset to default jobs:", error);

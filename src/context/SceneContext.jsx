@@ -50,10 +50,53 @@ export function SceneProvider({ children }) {
     jobs,
     setJobs,
     selectedJob,
-    inspectJob,
+    inspectJob: baseInspectJob,
     deleteJob,
     resetToDefaultJobs,
   } = useJobs();
+
+  // Pointer-based architecture wrapper with smart toggle logs & array-safe find
+  const inspectJob = useCallback(
+    (jobIdOrObject) => {
+      if (typeof jobIdOrObject === "string") {
+        const isCurrentlySelected = selectedJob?.id === jobIdOrObject;
+
+        if (isCurrentlySelected) {
+          console.log(
+            "🙈 [Pointer Flow] Hide Details triggered for Job ID:",
+            jobIdOrObject,
+          );
+        } else {
+          console.log(
+            "🔍 [Pointer Flow] View Details clicked. Passed Job ID:",
+            jobIdOrObject,
+          );
+
+          const storedJobs = JSON.parse(
+            localStorage.getItem("satlens_jobs") || "[]",
+          );
+          const foundJob = Array.isArray(storedJobs)
+            ? storedJobs.find((j) => j.id === jobIdOrObject)
+            : jobs.find((j) => j.id === jobIdOrObject);
+
+          console.log("📦 [Database/Storage Lookup Result]:", foundJob);
+        }
+
+        const storedJobs = JSON.parse(
+          localStorage.getItem("satlens_jobs") || "[]",
+        );
+        const targetJob = Array.isArray(storedJobs)
+          ? storedJobs.find((j) => j.id === jobIdOrObject)
+          : jobs.find((j) => j.id === jobIdOrObject);
+
+        baseInspectJob(targetJob || { id: jobIdOrObject });
+      } else {
+        console.log("⚠ [Legacy] Full object passed directly:", jobIdOrObject);
+        baseInspectJob(jobIdOrObject);
+      }
+    },
+    [jobs, selectedJob, baseInspectJob],
+  );
 
   // Using Custom Hook for Detection & Validation
   const {
@@ -71,7 +114,6 @@ export function SceneProvider({ children }) {
     setJobs,
   });
 
-  
   const setInputMode = useCallback(
     (mode) => {
       setInputModeState(mode);

@@ -126,7 +126,8 @@ export default function JobSelection() {
               key={job.id}
               job={job}
               isSelected={selectedJob?.id === job.id || selectedJob === job.id}
-              onInspect={() => inspectJob(job)}
+              // Pointer-based architecture: passing only lightweight job.id
+              onInspect={() => inspectJob(job.id)}
               onDelete={() => deleteJob(job.id)}
             />
           ))

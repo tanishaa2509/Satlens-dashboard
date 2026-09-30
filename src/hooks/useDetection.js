@@ -42,7 +42,12 @@ export function useDetection({ inputMode, selectedVillage, t1Scene, t2Scene, upl
         status: "Submitted",
       };
 
-      setJobs((prevJobs) => [newSubmittedJob, ...prevJobs]);
+      // 1. Save / Sync to localStorage as an Array (matches useJobs.js)
+      const existingJobs = JSON.parse(localStorage.getItem("satlens_jobs") || "[]");
+      const updatedJobs = [newSubmittedJob, ...(Array.isArray(existingJobs) ? existingJobs : [])];
+      localStorage.setItem("satlens_jobs", JSON.stringify(updatedJobs));
+
+      setJobs((prevJobs) => [newSubmittedJob, ...(Array.isArray(prevJobs) ? prevJobs : [])]);
 
       setShowSuccessPopup(true);
       setTimeout(() => {
@@ -68,7 +73,12 @@ export function useDetection({ inputMode, selectedVillage, t1Scene, t2Scene, upl
         status: "Submitted",
       };
 
-      setJobs((prevJobs) => [newSubmittedJob, ...prevJobs]);
+      // 1. Save / Sync to localStorage as an Array (matches useJobs.js)
+      const existingJobs = JSON.parse(localStorage.getItem("satlens_jobs") || "[]");
+      const updatedJobs = [newSubmittedJob, ...(Array.isArray(existingJobs) ? existingJobs : [])];
+      localStorage.setItem("satlens_jobs", JSON.stringify(updatedJobs));
+
+      setJobs((prevJobs) => [newSubmittedJob, ...(Array.isArray(prevJobs) ? prevJobs : [])]);
 
       setShowSuccessPopup(true);
       setTimeout(() => {
